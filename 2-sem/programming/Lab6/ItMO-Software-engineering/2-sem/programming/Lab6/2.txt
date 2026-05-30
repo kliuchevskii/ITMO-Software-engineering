@@ -1,2 +1,0 @@
-history
-execute_script 1.txt

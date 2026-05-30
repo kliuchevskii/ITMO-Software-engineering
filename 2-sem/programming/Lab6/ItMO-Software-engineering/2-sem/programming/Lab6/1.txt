@@ -1,3 +1,0 @@
-info
-help
-execute_script 2.txt
