@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="ru">
+    <head>
+        <meta charset="UTF-8">
+        <title>Лабораторная работа №1. Попадание точки в область</title>
+        <link rel="stylesheet" href="styles-1.css">
+    </head>
+    <body>
+
+    <table class="layout" cellspacing="0">
+
+        <tr>
+            <td colspan=2 class="header-cell">
+                <div class="header-item">ФИО: <span class="value">Ключевский Дмитрий Олегович</span> </div>
+                <div class="header-item">Группа: <span class="value">P3208</span></div>
+                <div class="header-item">Вариант: <span class="value">12632</span></div>
+            </td>
+        </tr>
+
+        <tr>
+            <td class="left-col">
+                <h2>Координатная плоскость</h2>
+                <canvas id="plane" width="480" height="480"></canvas>
+            </td>
+
+            <td class="right-col">
+                <h2>Проверка</h2>
+                <form id="point-form" novalidate>
+                    <fieldset class="field-group">
+                        <legend>Координата X</legend>
+                        <div class="checkbox-list" id="x-checkboxes"></div>
+                        <div class="error-msg" id="x-error"></div>
+                    </fieldset>
+
+                    <fieldset class="field-group">
+                        <legend>Координата Y, диапазон: [-3; 3]</legend>
+                        <input type="text" id="y-input" name="y" class="text-field" placeholder="Целое или вещественное число" required>
+                        <div class="error-msg" id="y-error"></div>
+                    </fieldset>
+                    
+                    <fieldset class="field-group">
+                        <legend>Радиус R</legend>
+                        <div class="radius-list" id="r-radius"></div>
+                    </fieldset>
+
+                    <div class="buttonns-row">
+                        <button type="submit" id="submit-btn">Проверить точку</button>
+                        <button type="button" id="clear-btn">Очистить историю</button>
+                    </div>
+                </form>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="result-cell">
+                <h2>Результаты проверок</h2>
+                <table class="results-table">
+                    <thead>
+                        <tr>
+                            <th>X</th>
+                            <th>Y</th>
+                            <th>R</th>
+                            <th>Результат</th>
+                            <th>Дата и время</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-body"></tbody>
+                </table>
+
+                <p id="empty-msg" class="empty-msg">История проверок пуста</p>
+            </td>
+        </tr>
+
+        <tr>
+            <td colspan="2" class="footer-cell">
+                Лабораторная работа №1
+            </td>
+        </tr>
+
+    </table>
+
+    <script src="app1.js"></script>
+    </body>
+</html>
