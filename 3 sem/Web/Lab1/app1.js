@@ -7,8 +7,7 @@ const KEY = "labVariantResults";
 
 const $ = id => document.getElementById(id);
 const canvas = $("plane"), ctx = canvas.getContext("2d");
-let lastPoint = null;
-
+let lastPoints = [];
 
 const fracLen = s => (s.split(".")[1] || "").length;
 const toBig = (s, k) => {
@@ -30,10 +29,7 @@ function validateY(s) {
     return y < -lim || y > lim ? `Значение должно быть в диапазоне от -${Y_LIMIT} до ${Y_LIMIT}.` : "";
 }
 
-
-
-
-const selected = id => document.querySelector(`#${id} input:checked`)?.value ?? null;
+const checked = id => [...document.querySelectorAll(`#${id} input:checked`)].map(i => i.value);
 
 function buildChoices(id, values, type) {
     $(id).innerHTML = values.map((v, i) =>
@@ -41,13 +37,17 @@ function buildChoices(id, values, type) {
         `<label for="${id}-${i}">${v}</label></span>`).join("");
 }
 
+function updateSelectAll() {
+    const total = X_VALUES.length, n = checked("x-checkboxes").length;
+    $("x-all").checked = n === total;
+    $("x-all").indeterminate = n > 0 && n < total;
+}
 
 function drawPlane() {
-    const R = +selected("r-radius");
+    const R = +checked("r-radius")[0];
     const W = canvas.width, c = W / 2, s = (c - 40) / (R + 1); // центр
     const e = (R + 1) * s;                                      // полуось
     ctx.clearRect(0, 0, W, W);
-
 
     ctx.fillStyle = "rgba(33,150,243,0.7)";
     ctx.beginPath();
@@ -78,14 +78,13 @@ function drawPlane() {
     ctx.fillText("x", c + e - 10, c - 8);
     ctx.fillText("y", c + 6, c - e + 10);
 
-
-    if (lastPoint && +lastPoint.r === R) {
+    ctx.strokeStyle = "#000";
+    lastPoints.filter(p => +p.r === R).forEach(p => {
         ctx.beginPath();
-        ctx.arc(c + lastPoint.x * s, c - lastPoint.y * s, 6, 0, 2 * Math.PI);
-        ctx.fillStyle = lastPoint.hit ? "#2e7d32" : "#c62828";
-        ctx.strokeStyle = "#000";
+        ctx.arc(c + p.x * s, c - p.y * s, 6, 0, 2 * Math.PI);
+        ctx.fillStyle = p.hit ? "#2e7d32" : "#c62828";
         ctx.fill(); ctx.stroke();
-    }
+    });
 }
 
 // История
@@ -100,31 +99,41 @@ function renderTable() {
     $("empty-msg").style.display = rows.length ? "none" : "block";
 }
 
-
 $("point-form").addEventListener("submit", evt => {
     evt.preventDefault();
-    const x = selected("x-checkboxes"), r = selected("r-radius");
+    const xs = checked("x-checkboxes"), r = checked("r-radius")[0];
     const y = $("y-input").value.trim().replace(",", ".");
-    const xErr = x === null ? "Выберите значение X." : "", yErr = validateY(y);
+    const xErr = xs.length === 0 ? "Выберите хотя бы одно значение X."
+        : xs.every(x => X_VALUES.includes(x)) ? "" : "Недопустимое значение X.";
+    const yErr = validateY(y);
     $("x-error").textContent = xErr;
     $("y-error").textContent = yErr;
     $("y-input").classList.toggle("invalid", !!yErr);
     if (xErr || yErr) return;
 
-    lastPoint = { x, y, r, hit: isHit(x, y, r), timestamp: new Date().toISOString() };
-    localStorage.setItem(KEY, JSON.stringify([...load(), lastPoint]));
+    const timestamp = new Date().toISOString();
+    lastPoints = xs.map(x => ({ x, y, r, hit: isHit(x, y, r), timestamp }));
+    localStorage.setItem(KEY, JSON.stringify([...load(), ...lastPoints]));
     renderTable();
     drawPlane();
 });
 
-$("x-checkboxes").addEventListener("change", evt => { // X — только одно значение
-    $("x-checkboxes").querySelectorAll("input").forEach(cb => { if (cb !== evt.target) cb.checked = false; });
+$("x-all").addEventListener("change", evt => {
+    $("x-checkboxes").querySelectorAll("input").forEach(cb => { cb.checked = evt.target.checked; });
     $("x-error").textContent = "";
-    drawPlane();
+});
+$("x-checkboxes").addEventListener("change", () => {
+    updateSelectAll();
+    $("x-error").textContent = "";
 });
 $("r-radius").addEventListener("change", drawPlane);
 $("y-input").addEventListener("input", () => { $("y-input").classList.remove("invalid"); $("y-error").textContent = ""; });
-$("clear-btn").addEventListener("click", () => { localStorage.removeItem(KEY); renderTable(); });
+$("clear-btn").addEventListener("click", () => {
+    localStorage.removeItem(KEY);
+    lastPoints = [];
+    renderTable();
+    drawPlane();
+});
 
 buildChoices("x-checkboxes", X_VALUES, "checkbox");
 buildChoices("r-radius", R_VALUES, "radio");
