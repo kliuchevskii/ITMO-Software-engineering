@@ -1,0 +1,183 @@
+* {box-sizing: border-box;}
+
+body {
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+}
+
+.page {
+    max-width: 1200px;
+    margin: 20px auto;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    background: #fff;
+}
+
+.content {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: stretch;
+}
+
+.card,
+.header,
+.footer {
+    padding: 16px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.header,
+.footer {
+    background-color: #2c3e50;
+    color: #fff;
+}
+
+.footer {
+    text-align: center;
+}
+
+.header-item {
+    display: inline-block;
+    margin-right: 24px;
+}
+
+.header-item .value {
+    font-weight: bold;
+    color: #f1c40f;
+}
+
+.plane-card {
+    flex: 0 0 520px;
+    max-width: 100%;
+    text-align: center;
+}
+
+.form-card {
+    flex: 1 1 320px;
+}
+
+#plane {
+    max-width: 100%;
+    height: auto;
+}
+
+.field-group {
+    border: 1px solid #bbb;
+    padding: 10px;
+    margin-bottom: 12px;
+    border-radius: 4px;
+}
+
+.field-group legend {
+    padding: 0 6px;
+    font-weight: bold;
+}
+
+.text-field {
+    width: 100%;
+    padding: 6px 8px;
+    border: 1px solid #888;
+    border-radius: 4px;
+}
+
+.select-all {
+    display: inline-block;
+    margin-bottom: 8px;
+}
+
+.checkbox-list, .radius-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.error-msg {
+    color: #c0392b;
+    font-size: 0.85em;
+    min-height: 1em;
+}
+
+.card h2 {
+    margin-top: 0;
+    margin-bottom: 12px;
+}
+
+.buttons-row {
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.btn {
+    padding: 8px 14px;
+    margin-right: 8px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: #3498db;
+    color: #fff;
+}
+
+.btn-secondary {
+    background: #e67e22;
+}
+
+.btn:disabled {
+    background: #95a5a6 !important;
+    cursor: not-allowed;
+}
+
+table.results-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+table.results-table th,
+table.results-table td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: center;
+}
+
+table.results-table thead th {
+    background: #34495e;
+    color: #fff;
+}
+
+.empty-msg {
+    text-align: center;
+    color: #888;
+    font-style: italic;
+}
+
+.result-hit {
+    color: #2e7d32;
+    font-weight: bold;
+}
+
+.result-miss {
+    color: #c62828;
+    font-weight: bold;
+}
+
+.hint {
+    color: #888;
+    font-size: 0.85em;
+    margin: 4px 0 0;
+}
+
+.server-error {
+    margin-top: 8px;
+}
+
+.server-info {
+    margin-top: 8px;
+    font-size: 0.9em;
+    color: #555;
+}
